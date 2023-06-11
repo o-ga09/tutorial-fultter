@@ -1,40 +1,47 @@
 import 'package:flutter/material.dart';
 import './detail.dart';
+import './models/entity.dart';
+import './const/const.dart';
 
 class ListItems extends StatelessWidget {
-  const ListItems({Key? key, required this.index}) : super(key: key);
-  final int index;
+  const ListItems({Key? key, required this.entity}) : super(key: key);
+  final Entity? entity;
   @override
   Widget build(BuildContext context) {
-    return ListTile(
+    if(entity != null) {
+      return ListTile(
       leading: Container(
         width: 80,
         decoration: BoxDecoration(
-          color: Colors.yellow.withOpacity(.5),
+          color: (TypeColors[entity!.types.first] ?? Colors.grey[100])
+                  ?.withOpacity(.3),
           borderRadius: BorderRadius.circular(10),
-          image: const DecorationImage(
+          image: DecorationImage(
             fit: BoxFit.fitWidth,
             image: NetworkImage(
-              "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
+              entity!.imageUrl,
             ),
           ),
         ),
       ),
-      title: const Text(
-        'Pikachu',
+      title: Text(
+        entity!.name,
         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
       ),
-      subtitle: const Text(
-        '⚡️electric',
+      subtitle: Text(
+        entity!.types.first,
       ),
       trailing: const Icon(Icons.navigate_next),
       onTap: () => {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (BuildContext context) => const Detail(),
+            builder: (BuildContext context) => Detail(entity: entity!,),
+            ),
           ),
-        ),
-      },
-    );
+        },
+      );
+    } else {
+      return const ListTile(title: Text('...'));
+    }
   }
 }

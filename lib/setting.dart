@@ -13,12 +13,16 @@ class _SettingState extends State<Setting> {
   @override
   Widget build(BuildContext context) {
     return Consumer<ThemeModeNotifier>(
-      builder: (context,mode,child) => ListView(
+      builder: (context, mode, child) => ListView(
         children: [
         // ignore: prefer_const_constructors
         ListTile(
           leading: const Icon(Icons.lightbulb),
           title: const Text('Dark/light mode'),
+          trailing: Text((mode.mode == ThemeMode.system)
+            ? 'System'
+            : (mode.mode == ThemeMode.dark ? 'Dark': 'Light')
+          ),
           onTap: () async {
             final ret = await Navigator.of(context).push<ThemeMode>(
                 MaterialPageRoute(
@@ -68,21 +72,21 @@ class _ThemeModeSelectionPage extends State<ThemeModeSelectionPage> {
             ),
             RadioListTile<ThemeMode>(
               value: ThemeMode.system,
-              groupValue: ThemeMode.system,
+              groupValue: _current,
               title: const Text('System'),
               onChanged: (val) => {setState(() => _current = val!)},
             ),
             RadioListTile<ThemeMode>(
               value: ThemeMode.dark,
-              groupValue: ThemeMode.system,
+              groupValue: _current,
               title: const Text('Dark'),
-              onChanged: (val) => {},
+              onChanged: (val) => {setState(() => _current = val!)},
             ),
             RadioListTile<ThemeMode>(
               value: ThemeMode.light,
-              groupValue: ThemeMode.system,
+              groupValue: _current,
               title: const Text('Light'),
-              onChanged: (val) => {},
+              onChanged: (val) => {setState(() => _current = val!)},
             ),
           ],
         ),
