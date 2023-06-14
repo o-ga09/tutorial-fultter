@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:mhapp/models/favorite.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import './lisy_items.dart';
 import './setting.dart';
 import './models/model.dart';
 import './models/entity.dart';
-import './const/const.dart';
+import './list.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final SharedPreferences pref = await SharedPreferences.getInstance();
   final themeModeNotifier = ThemeModeNotifier(pref);
   final entityNotifier = EntityNotifier();
+  final favoriteNotifier = FavoriteNotifier();
   runApp(MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -19,6 +20,9 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (context) => entityNotifier
+        ),
+        ChangeNotifierProvider(
+          create: (context) => favoriteNotifier
         ),
       ],
       child: const MyApp(),
@@ -64,7 +68,7 @@ class _TopPageState extends State<TopPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: currentbnb == 0 ? const List() : const Setting(),
+        child: currentbnb == 0 ? const EntityList() : const Setting(),
       ),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index) => {
@@ -83,47 +87,6 @@ class _TopPageState extends State<TopPage> {
             label: 'settings',
           ),
         ],
-      ),
-    );
-  }
-}
-
-class List extends StatefulWidget {
-  const List({Key? key}) : super(key: key);
-  @override
-  _ListState createState() => _ListState();
-}
-
-class _ListState extends State<List> {
-  static const int more = 30;
-  int EntityCount = more;
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<EntityNotifier>(
-      builder: (context,entity,child) => ListView.builder(
-      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-      itemCount: EntityCount + 1,
-      itemBuilder: (context, index) {
-          if(index == EntityCount) {
-            return OutlinedButton(
-              onPressed: () => {
-                setState(
-                  (){
-                    EntityCount = EntityCount + more;
-                    if(EntityCount > MaxId) {
-                      EntityCount = MaxId;
-                    }
-                  }
-                )
-              },
-              child: const Text('more'),
-            );
-          } else {
-            return ListItems(
-              entity: entity.byId(index + 1),
-            );
-          }
-        }
       ),
     );
   }

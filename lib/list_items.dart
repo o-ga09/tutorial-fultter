@@ -26,7 +26,7 @@ class ListItems extends StatelessWidget {
       ),
       title: Text(
         entity!.name,
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
       ),
       subtitle: Text(
         entity!.types.first,

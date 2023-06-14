@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+const String FavFileName = 'entity_fav.db';
+const String FavTableName = 'favorities';
 const String ApiRoute = 'https://pokeapi.co/api/v2';
 const int MaxId = 1010;
 const Map<String, Color> TypeColors = {
