@@ -10,16 +10,19 @@ class ListItems extends StatelessWidget {
   Widget build(BuildContext context) {
     if(entity != null) {
       return ListTile(
-      leading: Container(
-        width: 80,
-        decoration: BoxDecoration(
-          color: (TypeColors[entity!.types.first] ?? Colors.grey[100])
-                  ?.withOpacity(.3),
-          borderRadius: BorderRadius.circular(10),
-          image: DecorationImage(
-            fit: BoxFit.fitWidth,
-            image: NetworkImage(
-              entity!.imageUrl,
+      leading: Hero(
+        tag: entity!.name,
+        child: Container(
+          width: 80,
+          decoration: BoxDecoration(
+            color: (TypeColors[entity!.types.first] ?? Colors.grey[100])
+                    ?.withOpacity(.3),
+            borderRadius: BorderRadius.circular(10),
+            image: DecorationImage(
+              fit: BoxFit.fitWidth,
+              image: NetworkImage(
+                entity!.imageUrl,
+              ),
             ),
           ),
         ),

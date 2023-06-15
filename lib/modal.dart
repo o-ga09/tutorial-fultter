@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 
+
 class Modal extends StatelessWidget {
   const Modal({
     Key? key,
-    required this.favMode
+    required this.favMode,
+    required this.isGridMode,
+    required this.changeFavMode,
+    required this.changeGridMode,
   }) : super(key: key);
   final bool favMode;
+  final bool isGridMode;
+  final Function(bool) changeFavMode;
+  final Function(bool) changeGridMode;
 
   String mainText(bool fav) {
     if (fav) {
@@ -31,6 +38,21 @@ class Modal extends StatelessWidget {
     }
   }
 
+  String selectGridMenu(bool fav) {
+    if(fav) {
+      return 'リスト表示に切り替え';
+    } else {
+      return 'グリッド表示に切り替え';
+    }
+  }
+
+  String selectGridSubTitle(bool fav) {
+    if(fav) {
+      return 'リスト表示に切り替え';
+    } else {
+      return 'グリッド表示に切り替え';
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -67,6 +89,16 @@ class Modal extends StatelessWidget {
               ),
               onTap: () {
                 Navigator.pop(context, true);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.numbers),
+              subtitle: Text(
+                selectGridSubTitle(isGridMode),
+              ),
+              onTap: () {
+                changeGridMode(isGridMode);
+                Navigator.pop(context, isGridMode);
               },
             ),
             OutlinedButton(

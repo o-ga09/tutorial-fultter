@@ -68,7 +68,10 @@ class _TopPageState extends State<TopPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: currentbnb == 0 ? const EntityList() : const Setting(),
+        child: IndexedStack(
+          children: const [EntityList(),Setting()],
+          index: currentbnb,
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index) => {

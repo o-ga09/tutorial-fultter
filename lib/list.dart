@@ -1,3 +1,5 @@
+import 'package:mhapp/gridItem.dart';
+
 import './list_items.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +19,7 @@ class _ListState extends State<EntityList> {
   static const int pageSize = 30;
   bool isFavoriteMode = false;
   int _currentPage = 1;
+  bool isGridmode = false;
 
   bool isLastPage(int favcount,int page) {
     if (isFavoriteMode) {
@@ -56,6 +59,10 @@ class _ListState extends State<EntityList> {
   void changeMode(bool currentMode) {
     setState(() => isFavoriteMode = !currentMode);
   }
+
+  void changeGridMode(bool gridmode) {
+    setState(() => isGridmode = !gridmode);
+  }
   @override
   Widget build(BuildContext context) {
     return Consumer<FavoriteNotifier>(
@@ -81,6 +88,9 @@ class _ListState extends State<EntityList> {
                   builder: (BuildContext context) {
                     return Modal(
                       favMode: isFavoriteMode,
+                      isGridMode: isGridmode,
+                      changeFavMode: changeMode,
+                      changeGridMode: changeGridMode,
                     );
                   },
                 );
@@ -96,27 +106,61 @@ class _ListState extends State<EntityList> {
                 if (itemCount(favs.favs.length, _currentPage) == 0) {
                   return const Text('no data');
                 } else {
-                  return ListView.builder(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-                    itemCount: itemCount(favs.favs.length, _currentPage) + 1,
-                    itemBuilder: (context, index) {
-                      if (index == itemCount(favs.favs.length, _currentPage)) {
-                        return OutlinedButton(
-                          child: const Text('more'),
-                          onPressed: isLastPage(favs.favs.length, _currentPage)
-                              ? null
-                              : () => {
-                                    setState(() => _currentPage++),
-                                  },
-                        );
-                      } else {
-                        return ListItems(
-                          entity: entity.byId(itemId(favs.favs, index)),
-                        );
-                      }
-                    },
-                  );
+                  if(isGridmode) {
+                    return GridView.builder(
+                      gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                        ),
+                      itemCount: itemCount(favs.favs.length, _currentPage),
+                      itemBuilder: (context,index) {
+                        if(index == itemCount(favs.favs.length, _currentPage)) {
+                          return Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: OutlinedButton(
+                              child: const Text('more'),
+                              style: OutlinedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                              ),
+                              onPressed: isLastPage(favs.favs.length,_currentPage)
+                                ? null
+                                : () => {
+                                  setState(() => _currentPage++),
+                                },
+                            ),
+                          );
+                        } else {
+                          return GridItem(
+                            entity: entity.byId(itemId(favs.favs, index))
+                          );
+                        }
+                      },
+                    );
+                  } else {
+                    return ListView.builder(
+                      padding:
+                          const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                      itemCount: itemCount(favs.favs.length, _currentPage) + 1,
+                      itemBuilder: (context, index) {
+                        if (index == itemCount(favs.favs.length, _currentPage)) {
+                          return OutlinedButton(
+                            child: const Text('more'),
+                            onPressed: isLastPage(favs.favs.length, _currentPage)
+                                ? null
+                                : () => {
+                                      setState(() => _currentPage++),
+                                    },
+                          );
+                        } else {
+                          return ListItems(
+                            entity: entity.byId(itemId(favs.favs, index)),
+                          );
+                        }
+                      },
+                    );
+                  }
                 }
               },
             ),
