@@ -38,19 +38,19 @@ class Modal extends StatelessWidget {
     }
   }
 
-  String selectGridMenu(bool fav) {
-    if(fav) {
-      return 'リスト表示に切り替え';
+  String selectGridTitle(bool grid) {
+    if(grid) {
+      return 'ポケモンをグリッド表示します';
     } else {
-      return 'グリッド表示に切り替え';
+      return 'ポケモンをリスト表示します';
     }
   }
 
-  String selectGridSubTitle(bool fav) {
-    if(fav) {
-      return 'リスト表示に切り替え';
-    } else {
+  String selectGridSubTitle(bool grid) {
+    if(grid) {
       return 'グリッド表示に切り替え';
+    } else {
+      return 'リスト表示に切り替え';
     }
   }
   @override
@@ -74,7 +74,7 @@ class Modal extends StatelessWidget {
               child: Text(
                 mainText(favMode),
                 style: const TextStyle(
-                  fontSize: 20,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -88,17 +88,21 @@ class Modal extends StatelessWidget {
                 menuSubtitle(favMode),
               ),
               onTap: () {
-                Navigator.pop(context, true);
+                changeFavMode(favMode);
+                Navigator.pop(context);
               },
             ),
             ListTile(
               leading: const Icon(Icons.numbers),
+              title: Text(
+                selectGridTitle(isGridMode),
+              ),
               subtitle: Text(
                 selectGridSubTitle(isGridMode),
               ),
               onTap: () {
                 changeGridMode(isGridMode);
-                Navigator.pop(context, isGridMode);
+                Navigator.pop(context);
               },
             ),
             OutlinedButton(

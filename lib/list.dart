@@ -112,7 +112,7 @@ class _ListState extends State<EntityList> {
                         const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 3,
                         ),
-                      itemCount: itemCount(favs.favs.length, _currentPage),
+                      itemCount: itemCount(favs.favs.length, _currentPage) + 1,
                       itemBuilder: (context,index) {
                         if(index == itemCount(favs.favs.length, _currentPage)) {
                           return Padding(
